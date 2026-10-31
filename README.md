@@ -1,8 +1,10 @@
 # ⚔️ BattlePass - Minecraft Battle Pass Plugin for Paper & Spigot (1.21.11–26.3)
 
+> **Fork by [ChairawanChannel](https://github.com/chairawanchannel)** — maintained fork of [lino9999/BattlePass](https://github.com/lino9999/BattlePass). This fork adds `/bp addlevel` and `/bp removelevel`, and removes the Battle Coins system entirely.
+
 BattlePass adds daily quests, seasonal progression, and Free and Premium reward tracks to your Minecraft Java server. Create missions and rewards through in-game editors, with optional PlaceholderAPI and MythicMobs support.
 
-**[Download the latest JAR](https://github.com/lino9999/BattlePass/releases/latest)** · [What's new](docs/RELEASE_NOTES.md) · [Report a bug](https://github.com/lino9999/BattlePass/issues)
+**[Download the latest JAR](https://github.com/chairawanchannel/BattlePass/releases/latest)** · [What's new](docs/RELEASE_NOTES.md) · [Report a bug](https://github.com/chairawanchannel/BattlePass/issues)
 
 ![Java](https://img.shields.io/badge/Java-21%20%2F%2025-orange) ![Spigot](https://img.shields.io/badge/Minecraft-1.21.11%E2%80%9326.3-yellow) ![License](https://img.shields.io/badge/License-MIT-blue)
 
@@ -12,9 +14,9 @@ BattlePass adds daily quests, seasonal progression, and Free and Premium reward 
 
 ### Support the Project
 
-BattlePass is free and open source, and it is developed and maintained in my spare time.
-If this plugin saves you time or helps your server grow, consider buying me a coffee.
-Every donation keeps the updates coming and helps me invest even more time into new features.
+BattlePass is free and open source, and it is developed and maintained in spare time.
+If this plugin saves you time or helps your server grow, consider buying the original author a coffee.
+Every donation keeps the updates coming and helps invest even more time into new features.
 
 [![Buy Me A Coffee](https://img.buymeacoffee.com/button-api/?text=Buy%20me%20a%20coffee&slug=lino9999&button_colour=FFDD00&font_colour=000000&font_family=Poppins&outline_colour=000000&coffee_colour=ffffff)](https://buymeacoffee.com/lino9999)
 
@@ -71,11 +73,25 @@ Every donation keeps the updates coming and helps me invest even more time into 
 
 ---
 
+## 🆕 What's different in this fork?
+
+Compared to upstream [lino9999/BattlePass](https://github.com/lino9999/BattlePass):
+
+* **Added** `/bp addlevel <player> <amount>` — give levels to a player, clamped to the configured max level.
+* **Added** `/bp removelevel <player> <amount>` — remove levels from a player, clamped to level 1.
+* **Removed** the entire **Battle Coins** system:
+    * No more daily top-10 coin distribution.
+    * No more Battle Pass Shop.
+    * `coins` is no longer a valid `/bp giveitem` type.
+    * Existing `battleCoins` data in the database is ignored.
+
+---
+
 ## 📥 Installation
 
 Supports Spigot and available Paper releases from Minecraft Java 1.21.11 through 26.3. Use Java 21 on 1.21.11 and Java 25 on 26.x. See the [compatibility matrix](docs/COMPATIBILITY.md) for exact builds and verification limits. Paper has no published 26.1 build; its 26.1.1 build is alpha.
 
-1.  Download `BattlePass-8.6.2 Unofficial.jar` from the latest [GitHub release](https://github.com/lino9999/BattlePass/releases/latest). Choose the JAR under **Assets**, rather than the source-code ZIP.
+1.  Download the latest JAR from the [Releases page](https://github.com/chairawanchannel/BattlePass/releases/latest). Choose the JAR under **Assets**, rather than the source-code ZIP.
 2.  Drop it into your server's `/plugins/` folder.
 3.  (Optional) Install **PlaceholderAPI** for placeholders.
 4.  Restart your server.
@@ -87,15 +103,15 @@ Supports Spigot and available Paper releases from Minecraft Java 1.21.11 through
 2. Replace the old BattlePass JAR in `plugins/` with the new one, keeping only one BattlePass JAR installed.
 3. Keep your existing configuration and data files, then start the server and check the startup log.
 
-This release includes the [latest and previous fixes](docs/RELEASE_NOTES.md). Golden apple and block missions accept names entered through the editor more reliably. Use `BREAK_BLOCK` for breaking blocks and `PLACE_BLOCK` for placement; `MINE_BLOCK` remains limited to ores. New blocks are available only on server versions that include them. Mission troubleshooting is in [the mission guide](docs/MISSIONS.md).
+> **Upgrading from upstream BattlePass?** This fork removes the Battle Coins system (shop, leaderboard coin rewards, and coin items). Existing `battleCoins` data in the database is ignored, and `/bp giveitem` no longer accepts `coins`. Back up your database before switching.
+
+Mission troubleshooting is in [the mission guide](docs/MISSIONS.md). Golden apple and block missions accept names entered through the editor reliably. Use `BREAK_BLOCK` for breaking blocks and `PLACE_BLOCK` for placement; `MINE_BLOCK` remains limited to ores. New blocks are available only on server versions that include them.
 
 When reporting a problem, include the Minecraft version, Paper/Spigot build, BattlePass version, relevant mission settings and any error log. Remove passwords and other private information before sharing configuration.
 
 ### Build from source
 
-Use Java 21 and Maven, then run `mvn clean package`. The build runs the regression tests and produces `target/BattlePass-8.6.2 Unofficial.jar`. The release version is defined in `pom.xml`; Maven also writes it into the packaged `plugin.yml`.
-
-See [the issue review](docs/ISSUE_REVIEW.md) for the fixes, configuration examples and validation details. Existing databases are migrated automatically at startup. If MySQL reports an `ALTER` permission error, grant the plugin's database account permission to update its tables before restarting.
+Use Java 21 and Maven, then run `mvn clean package`. The build runs the regression tests and produces the plugin JAR in `target/`. The release version is defined in `pom.xml`; Maven also writes it into the packaged `plugin.yml`.
 
 For contributors and AI agents, start with the [development quick reference](docs/README.md) for feature entry points, mission troubleshooting, tests and the commit/push workflow.
 
@@ -107,11 +123,13 @@ For contributors and AI agents, start with the [development quick reference](doc
 | :--- | :--- | :--- |
 | `/bp` or `/battlepass` | `battlepass.use` | Opens the main Battle Pass menu. |
 | `/bp help` | `battlepass.use` | Shows the help menu. |
-| `/bp giveitem <type> <player> <amount>` | `battlepass.admin` | Give special items (premium, levelboost, xpevent). |
+| `/bp giveitem <type> <player> <amount>` | `battlepass.admin` | Give special items (`premium`, `levelboost`, `xpevent`). |
 | `/bp addpremium <player>` | `battlepass.admin` | Force unlock Premium Pass for a player. |
 | `/bp removepremium <player>` | `battlepass.admin` | Remove the Premium Pass from a player. |
 | `/bp addxp <player> <amount>` | `battlepass.admin` | Give XP to a player. |
 | `/bp removexp <player> <amount>` | `battlepass.admin` | Remove XP from a player. |
+| `/bp addlevel <player> <amount>` | `battlepass.admin` | Give levels to a player (clamped to max level). |
+| `/bp removelevel <player> <amount>` | `battlepass.admin` | Remove levels from a player (clamped to level 1). |
 | `/bp reset season` | `battlepass.admin` | Force reset the entire season progress. |
 | `/bp reset missions` | `battlepass.admin` | Force generate new daily missions. |
 | `/bp resetplayer <name>` | `battlepass.admin` | Reset battle pass progress for a player. |
@@ -148,6 +166,7 @@ See [Placeholders.md](Placeholders.md) for the full list.
 ---
 
 <div align="center">
-  <p>Made with ❤️ by Lino</p>
+  <p>Original plugin made with ❤️ by <a href="https://github.com/lino9999">Lino</a></p>
+  <p>Fork maintained by <a href="https://github.com/chairawanchannel">ChairawanChannel</a></p>
   <p>Found a bug? Report it in the Issues tab!</p>
 </div>
