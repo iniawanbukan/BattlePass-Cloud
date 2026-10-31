@@ -167,6 +167,6 @@ See [Placeholders.md](Placeholders.md) for the full list.
 
 <div align="center">
   <p>Original plugin made with ❤️ by <a href="https://github.com/lino9999">Lino</a></p>
-  <p>Fork maintained by <a href="https://github.com/chairawanchannel">ChairawanChannel</a></p>
+  <p>Fork maintained by <a href="https://github.com/iniawanbukan">ChairawanChannel</a></p>
   <p>Found a bug? Report it in the Issues tab!</p>
 </div>
