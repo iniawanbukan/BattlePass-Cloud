@@ -16,7 +16,7 @@ libraries:
 commands:
   battlepass:
     description: Open the BattlePass GUI or manage battle pass system
-    usage: /battlepass [help|reload|addpremium|removepremium|addxp|removexp|addcoins|removecoins] [player] [amount]
+    usage: /battlepass [help|reload|addpremium|removepremium|addxp|removexp] [player] [amount]
     aliases: [bp, pass]
     permission: battlepass.use
     permission-message: You don't have permission to use this command!

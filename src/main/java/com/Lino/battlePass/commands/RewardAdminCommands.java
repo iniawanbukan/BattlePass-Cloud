@@ -121,10 +121,6 @@ final class RewardAdminCommands {
                     item = plugin.getCustomItemManager().createPremiumPassItem(amount);
                     itemName = "Premium Pass Voucher";
                     break;
-                case "coins":
-                    item = plugin.getCustomItemManager().createBattleCoinsItem(amount);
-                    itemName = "Battle Coin Token";
-                    break;
                 case "levelboost":
                     item = plugin.getCustomItemManager().createLevelBoostItem(amount);
                     itemName = "Experience Boost Elixir";

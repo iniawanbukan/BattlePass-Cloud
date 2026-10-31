@@ -13,7 +13,6 @@ public class PlayerData {
     public int totalLevels = 0;
     public boolean hasPremium = false;
     public long lastDailyReward = 0;
-    public int battleCoins = 0;
     public boolean excludeFromTop = false;
     public final Map<String, Integer> missionProgress = new ConcurrentHashMap<>();
     public final Set<Integer> claimedFreeRewards = ConcurrentHashMap.newKeySet();
@@ -29,14 +28,6 @@ public class PlayerData {
 
     public void invalidateProgress() { progressRevision++; }
 
-    /** Credits only the amount representable by the persisted integer balance. */
-    public int addBattleCoins(int amount) {
-        int current = Math.max(0, battleCoins);
-        int credited = Math.min(Math.max(0, amount), Integer.MAX_VALUE - current);
-        battleCoins = current + credited;
-        return credited;
-    }
-
     public PlayerData copy() {
         PlayerData snapshot = new PlayerData(this.uuid);
         snapshot.xp = this.xp;
@@ -45,7 +36,6 @@ public class PlayerData {
         snapshot.totalLevels = this.totalLevels;
         snapshot.hasPremium = this.hasPremium;
         snapshot.lastDailyReward = this.lastDailyReward;
-        snapshot.battleCoins = this.battleCoins;
         snapshot.excludeFromTop = this.excludeFromTop;
 
         snapshot.missionProgress.putAll(this.missionProgress);

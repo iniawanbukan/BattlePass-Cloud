@@ -142,31 +142,12 @@ final class BattlePassMenuControls {
         leaderboardMeta.setDisplayName(plugin.getMessageManager().getMessage("items.leaderboard-button.name"));
 
         List<String> lboardLore = new ArrayList<>();
-        String coinsTime = plugin.getCoinsDistributionTask() != null ?
-                plugin.getCoinsDistributionTask().getTimeUntilNextDistribution() : "Unknown";
-
         for (String line : plugin.getMessageManager().getMessagesConfig().getStringList("items.leaderboard-button.lore")) {
-            String processedLine = line.replace("%coins_time%", coinsTime);
-            lboardLore.add(GradientColorParser.parse(processedLine));
+            lboardLore.add(GradientColorParser.parse(line));
         }
         leaderboardMeta.setLore(lboardLore);
         leaderboard.setItemMeta(leaderboardMeta);
         gui.setItem(48, leaderboard);
-
-        if (plugin.getConfigManager().isShopEnabled()) {
-            ItemStack shop = new ItemStack(Material.GOLD_INGOT);
-            ItemMeta shopMeta = shop.getItemMeta();
-            shopMeta.setDisplayName(plugin.getMessageManager().getMessage("items.shop-button.name"));
-
-            List<String> shopLore = new ArrayList<>();
-            for (String line : plugin.getMessageManager().getMessagesConfig().getStringList("items.shop-button.lore")) {
-                String processedLine = line.replace("%coins%", String.valueOf(playerData.battleCoins));
-                shopLore.add(GradientColorParser.parse(processedLine));
-            }
-            shopMeta.setLore(shopLore);
-            shop.setItemMeta(shopMeta);
-            gui.setItem(47, shop);
-        }
 
         ItemStack dailyReward = new ItemStack(Material.SUNFLOWER);
         ItemMeta dailyMeta = dailyReward.getItemMeta();

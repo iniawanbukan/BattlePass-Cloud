@@ -54,17 +54,6 @@ public class GuiManager {
         gui.open();
     }
 
-    public void openShopGUI(Player player) {
-        if (!configManager.isShopEnabled()) {
-            openBattlePassGUI(player, currentPages.getOrDefault(player.getEntityId(), 1));
-            return;
-        }
-        if (!isPlayerDataReady(player)) return;
-
-        ShopGui gui = new ShopGui(plugin, player);
-        gui.open();
-    }
-
     private boolean isPlayerDataReady(Player player) {
         if (playerDataManager.getPlayerData(player.getUniqueId()) == null) {
             player.sendMessage(messageManager.getPrefix() +

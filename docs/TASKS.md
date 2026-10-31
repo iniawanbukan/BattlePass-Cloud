@@ -8,7 +8,6 @@ Java paths are relative to `src/main/java/com/Lino/battlePass/`.
 | Periodic phase order, guards and cleanup clock | `tasks/BattlePassTask` |
 | Reward notification state and presentation | `tasks/RewardNotifications` |
 | Elapsed play time and reset boundaries | `listeners/PlayTimeTracker`, [RESET_WORKFLOW.md](RESET_WORKFLOW.md) |
-| Independent periodic coin delivery | [COINS.md](COINS.md) |
 
 The default Bukkit schedule remains a 6000-tick initial delay and 1200-tick period. Work stays on the server thread: save players, check season reset, check daily reset when progress is unpaused, notify rewards, sample play time, then perform due cleanup. Recheck activity between phases, players and cleanup components. A task captures its player/mission/reward managers; replacement managers, stopped/disabled plugins and terminal shutdown invalidate it. An in-stack guard prevents nested runs and releases in finally even after a top-level failure.
 

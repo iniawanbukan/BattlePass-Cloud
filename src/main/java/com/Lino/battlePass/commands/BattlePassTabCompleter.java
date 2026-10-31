@@ -30,8 +30,6 @@ public class BattlePassTabCompleter implements TabCompleter {
                 completions.add("removepremium");
                 completions.add("addxp");
                 completions.add("removexp");
-                completions.add("addcoins");
-                completions.add("removecoins");
                 completions.add("giveitem");
                 completions.add("excludefromtop");
                 completions.add("includetop");
@@ -53,7 +51,6 @@ public class BattlePassTabCompleter implements TabCompleter {
                 completions.add("5x");
             } else if (args[0].equalsIgnoreCase("giveitem") && sender.hasPermission("battlepass.admin")) {
                 completions.add("premium");
-                completions.add("coins");
                 completions.add("levelboost");
                 completions.add("xpevent");
             } else if (sender.hasPermission("battlepass.admin")) {
@@ -61,7 +58,6 @@ public class BattlePassTabCompleter implements TabCompleter {
 
                 if (subCommand.equals("addpremium") || subCommand.equals("removepremium") ||
                         subCommand.equals("addxp") || subCommand.equals("removexp") ||
-                        subCommand.equals("addcoins") || subCommand.equals("removecoins") ||
                         subCommand.equals("excludefromtop") || subCommand.equals("includetop") ||
                         subCommand.equals("resetplayer")) {
 
@@ -84,8 +80,7 @@ public class BattlePassTabCompleter implements TabCompleter {
                 completions.addAll(Bukkit.getOnlinePlayers().stream()
                         .map(Player::getName)
                         .collect(Collectors.toList()));
-            } else if (subCommand.equals("addxp") || subCommand.equals("removexp") ||
-                    subCommand.equals("addcoins") || subCommand.equals("removecoins")) {
+            } else if (subCommand.equals("addxp") || subCommand.equals("removexp")) {
 
                 completions.add("10");
                 completions.add("50");

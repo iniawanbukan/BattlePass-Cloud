@@ -23,7 +23,7 @@ final class SeasonTransitionRepository {
                 try (DatabaseTransaction transaction = new DatabaseTransaction(connection)) {
                     String table = connections.getPrefix() + "season_data";
                     requireNoPendingTransition(connection, connections);
-                    players.resetOnConnection(connection, plan.resetCoins());
+                    players.resetOnConnection(connection);
                     missions.replaceOnConnection(connection, plan.missions(), plan.missionDate());
                     seasons.saveOnConnection(connection, plan.start(), plan.end(), plan.nextReset(), plan.missionDate(), plan.cycleStart());
                     try (PreparedStatement statement = connection.prepareStatement("UPDATE " + table

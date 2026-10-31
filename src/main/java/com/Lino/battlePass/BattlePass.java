@@ -11,11 +11,9 @@ import com.Lino.battlePass.managers.*;
 import com.Lino.battlePass.commands.BattlePassCommand;
 import com.Lino.battlePass.listeners.EventManager;
 import com.Lino.battlePass.tasks.BattlePassTask;
-import com.Lino.battlePass.tasks.CoinsDistributionTask;
 import org.bukkit.scheduler.BukkitRunnable;
 
 import java.io.File;
-import java.time.LocalDateTime;
 
 public class BattlePass extends JavaPlugin {
 
@@ -27,8 +25,6 @@ public class BattlePass extends JavaPlugin {
     private GuiManager guiManager;
     private MessageManager messageManager;
     private EventManager eventManager;
-    private ShopManager shopManager;
-    private CoinsDistributionTask coinsDistributionTask;
     private CustomItemManager customItemManager;
     private SoundManager soundManager;
     private RewardEditorManager rewardEditorManager;
@@ -55,7 +51,6 @@ public class BattlePass extends JavaPlugin {
             saveResourceIfNotExists("messages.yml");
             saveResourceIfNotExists("BattlePassFREE.yml");
             saveResourceIfNotExists("BattlePassPREMIUM.yml");
-            saveResourceIfNotExists("shop.yml");
 
             SeasonRotationManager.recoverFilesBeforeStartup(this);
             ConfigurationFiles.validateManagedFiles(getDataFolder());
@@ -73,7 +68,6 @@ public class BattlePass extends JavaPlugin {
             playerDataManager = new PlayerDataManager(this, databaseManager);
             rewardManager = new RewardManager(this, configManager);
             missionManager = new MissionManager(this, configManager, databaseManager, playerDataManager);
-            shopManager = new ShopManager(this);
             customItemManager = new CustomItemManager(this);
             soundManager = new SoundManager(this, customItemManager);
             guiManager = new GuiManager(this, playerDataManager, missionManager, rewardManager, messageManager, configManager);
@@ -135,7 +129,6 @@ public class BattlePass extends JavaPlugin {
         getCommand("battlepass").setTabCompleter(new BattlePassTabCompleter());
         periodicTask = new BattlePassTask(this);
         periodicTask.runTaskTimer(this, 6000L, 1200L);
-        restoreCoinsDistributionTask();
         registerPlaceholders();
         checkForUpdates();
         getLogger().info("✓ Battle Pass enabled successfully!");
@@ -183,9 +176,6 @@ public class BattlePass extends JavaPlugin {
         if (soundManager != null) {
             soundManager.shutdown();
         }
-        if (coinsDistributionTask != null) {
-            coinsDistributionTask.cancel();
-        }
         if (playerDataManager != null) {
             playerDataManager.saveAllPlayersSync();
         }
@@ -195,22 +185,6 @@ public class BattlePass extends JavaPlugin {
         if (databaseManager != null) {
             databaseManager.shutdown();
         }
-    }
-
-    private void restoreCoinsDistributionTask() {
-        long generation = lifecycleGeneration;
-        databaseManager.loadCoinsDistributionTime()
-                .thenAccept(deadline -> {
-                    if (isLifecycleActive(generation)) startCoinsDistributionTask(deadline);
-                })
-                .exceptionally(ex -> {
-                    if (!isLifecycleActive(generation)) return null;
-                    getLogger().severe("Could not load coins distribution time: " + ex.getMessage());
-                    getServer().getScheduler().runTask(BattlePass.this, () -> {
-                        if (isLifecycleActive(generation)) getServer().getPluginManager().disablePlugin(BattlePass.this);
-                    });
-                    return null;
-                });
     }
 
     private void registerPlaceholders() {
@@ -275,7 +249,6 @@ public class BattlePass extends JavaPlugin {
         configManager.reload();
         messageManager.reload();
         rewardManager.loadRewards();
-        shopManager.reload();
         // Page history is navigation state; the owned menus below are rebuilt from fresh configuration.
         missionManager.recalculateResetTimeOnReload();
         if (!stopping && missionManager.isInitialized()) seasonRotationManager.createDefaultSeasonFolders();
@@ -285,7 +258,7 @@ public class BattlePass extends JavaPlugin {
             var context = com.Lino.battlePass.gui.BaseHolder.contextOf(view.getTopInventory());
             if (context == null) continue;
             switch (context.type()) {
-                case BATTLE_PASS, LEADERBOARD, MISSIONS, SHOP -> {
+                case BATTLE_PASS, LEADERBOARD, MISSIONS -> {
                     player.closeInventory();
                     var closedTo = player.getOpenInventory().getTopInventory();
                     Bukkit.getScheduler().runTaskLater(this, () -> {
@@ -294,7 +267,6 @@ public class BattlePass extends JavaPlugin {
                             case BATTLE_PASS -> guiManager.openBattlePassGUI(player, context.page());
                             case LEADERBOARD -> guiManager.openLeaderboardGUI(player);
                             case MISSIONS -> guiManager.openMissionsGUI(player);
-                            case SHOP -> guiManager.openShopGUI(player);
                             default -> { }
                         }
                     }, 1L);
@@ -346,45 +318,6 @@ public class BattlePass extends JavaPlugin {
 
     public MissionEditorManager getMissionEditorManager() {
         return missionEditorManager;
-    }
-
-    public ShopManager getShopManager() {
-        return shopManager;
-    }
-
-    public CoinsDistributionTask getCoinsDistributionTask() {
-        return coinsDistributionTask;
-    }
-
-    public void setCoinsDistributionTask(CoinsDistributionTask task) {
-        this.coinsDistributionTask = task;
-    }
-
-    public void startCoinsDistributionTask(LocalDateTime savedTime) {
-        if (stopping) return;
-        if (!Bukkit.isPrimaryThread()) {
-            long generation = lifecycleGeneration;
-            Bukkit.getScheduler().runTask(this, () -> {
-                if (lifecycleGeneration == generation) startCoinsDistributionTask(savedTime);
-            });
-            return;
-        }
-
-        LocalDateTime nextTime = savedTime;
-        if (coinsDistributionTask != null) {
-            if (nextTime == null) nextTime = coinsDistributionTask.getNextDistribution();
-            coinsDistributionTask.cancel();
-        }
-
-        CoinsDistributionTask task = new CoinsDistributionTask(this);
-        if (nextTime != null) {
-            task.setNextDistribution(nextTime);
-        } else {
-            task.resetDistributionTime();
-        }
-
-        coinsDistributionTask = task;
-        task.runTaskTimer(this, 200L, 1200L);
     }
 
     public CustomItemManager getCustomItemManager() {

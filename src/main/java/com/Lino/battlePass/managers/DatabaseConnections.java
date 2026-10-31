@@ -131,7 +131,6 @@ final class DatabaseConnections {
                         "total_levels INTEGER DEFAULT 0," +
                         "has_premium INTEGER DEFAULT 0," +
                         "last_daily_reward BIGINT DEFAULT 0," +
-                        "battle_coins INTEGER DEFAULT 0," +
                         "exclude_from_top INTEGER DEFAULT 0)"
                 );
 
@@ -161,8 +160,7 @@ final class DatabaseConnections {
                         "mission_cycle_start TEXT," +
                         "season_transition_id TEXT," +
                         "pending_rotation_season INTEGER," +
-                        "current_mission_date TEXT," +
-                        "next_coins_distribution TEXT)"
+                        "current_mission_date TEXT)"
                 );
 
                 stmt.executeUpdate("CREATE TABLE IF NOT EXISTS " + prefix + "daily_missions (" +
@@ -177,7 +175,7 @@ final class DatabaseConnections {
                 );
 
                 DatabaseSchema.ensureColumns(conn, prefix + "season_data", Map.of(
-                        "start_date", "TEXT", "next_coins_distribution", "TEXT", "mission_cycle_start", "TEXT",
+                        "start_date", "TEXT", "mission_cycle_start", "TEXT",
                         "season_transition_id", "TEXT", "pending_rotation_season", "INTEGER"));
                 // MySQL rejects TEXT DEFAULT ''; existing rows can safely use NULL instead.
                 DatabaseSchema.ensureColumns(conn, prefix + "daily_missions", Map.of("additional_targets", "TEXT"));

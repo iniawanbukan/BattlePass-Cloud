@@ -27,8 +27,8 @@ final class PlayerDataRepository {
             PlayerData data = new PlayerData(uuid);
             String sqlSelect = "SELECT * FROM " + connections.getPrefix() + "players WHERE uuid = ?";
             String sqlInsert = connections.isMySQL()
-                    ? "INSERT IGNORE INTO " + connections.getPrefix() + "players (uuid, xp, level, claimed_free, claimed_premium, last_notification, total_levels, has_premium, last_daily_reward, battle_coins, exclude_from_top) VALUES (?, 0, 1, '', '', 0, 0, 0, 0, 0, 0)"
-                    : "INSERT OR IGNORE INTO " + connections.getPrefix() + "players (uuid, xp, level, claimed_free, claimed_premium, last_notification, total_levels, has_premium, last_daily_reward, battle_coins, exclude_from_top) VALUES (?, 0, 1, '', '', 0, 0, 0, 0, 0, 0)";
+                    ? "INSERT IGNORE INTO " + connections.getPrefix() + "players (uuid, xp, level, claimed_free, claimed_premium, last_notification, total_levels, has_premium, last_daily_reward, exclude_from_top) VALUES (?, 0, 1, '', '', 0, 0, 0, 0, 0)"
+                    : "INSERT OR IGNORE INTO " + connections.getPrefix() + "players (uuid, xp, level, claimed_free, claimed_premium, last_notification, total_levels, has_premium, last_daily_reward, exclude_from_top) VALUES (?, 0, 1, '', '', 0, 0, 0, 0, 0)";
 
             Connection conn = null;
             boolean shouldClose = connections.isMySQL();
@@ -52,7 +52,6 @@ final class PlayerDataRepository {
                             data.totalLevels = rs.getInt("total_levels");
                             data.hasPremium = rs.getInt("has_premium") == 1;
                             data.lastDailyReward = rs.getLong("last_daily_reward");
-                            data.battleCoins = rs.getInt("battle_coins");
                             data.excludeFromTop = rs.getInt("exclude_from_top") == 1;
 
                             String claimedFree = rs.getString("claimed_free");
@@ -134,7 +133,7 @@ final class PlayerDataRepository {
 
     public CompletableFuture<Boolean> savePlayerData(UUID uuid, PlayerData data) {
         return CompletableFuture.supplyAsync(() -> {
-            String updateSql = "UPDATE " + connections.getPrefix() + "players SET xp=?, level=?, claimed_free=?, claimed_premium=?, last_notification=?, total_levels=?, has_premium=?, last_daily_reward=?, battle_coins=?, exclude_from_top=? WHERE uuid=?";
+            String updateSql = "UPDATE " + connections.getPrefix() + "players SET xp=?, level=?, claimed_free=?, claimed_premium=?, last_notification=?, total_levels=?, has_premium=?, last_daily_reward=?, exclude_from_top=? WHERE uuid=?";
             String missionSql = connections.isMySQL()
                     ? "INSERT INTO " + connections.getPrefix() + "missions (uuid, mission, progress, date) VALUES (?, ?, ?, ?) ON DUPLICATE KEY UPDATE progress = VALUES(progress)"
                     : "INSERT OR REPLACE INTO " + connections.getPrefix() + "missions (uuid, mission, progress, date) VALUES (?, ?, ?, ?)";
@@ -155,9 +154,8 @@ final class PlayerDataRepository {
                         ps.setInt(6, data.totalLevels);
                         ps.setInt(7, data.hasPremium ? 1 : 0);
                         ps.setLong(8, data.lastDailyReward);
-                        ps.setInt(9, data.battleCoins);
-                        ps.setInt(10, data.excludeFromTop ? 1 : 0);
-                        ps.setString(11, uuid.toString());
+                        ps.setInt(9, data.excludeFromTop ? 1 : 0);
+                        ps.setString(10, uuid.toString());
                         ps.executeUpdate();
                     }
 
@@ -188,28 +186,6 @@ final class PlayerDataRepository {
         }, connections.getExecutor());
     }
 
-    public CompletableFuture<Void> updatePlayerCoins(UUID uuid, int amount) {
-        return CompletableFuture.runAsync(() -> {
-            Connection conn = null;
-            boolean shouldClose = connections.isMySQL();
-
-            try {
-                conn = connections.getConnection();
-                try (PreparedStatement ps = conn.prepareStatement("UPDATE " + connections.getPrefix() + "players SET battle_coins = ? WHERE uuid = ?")) {
-                    ps.setInt(1, amount);
-                    ps.setString(2, uuid.toString());
-                    ps.executeUpdate();
-                }
-            } catch (SQLException e) {
-                throw new CompletionException("Failed to update player coins", e);
-            } finally {
-                if (shouldClose && conn != null) {
-                    try { conn.close(); } catch (SQLException e) {}
-                }
-            }
-        }, connections.getExecutor());
-    }
-
     public CompletableFuture<List<PlayerData>> getTop10Players() {
         return CompletableFuture.supplyAsync(() -> {
             List<PlayerData> allPlayers = new ArrayList<>();
@@ -225,7 +201,6 @@ final class PlayerDataRepository {
                             data.xp = rs.getInt("xp");
                             data.level = rs.getInt("level");
                             data.totalLevels = rs.getInt("total_levels");
-                            data.battleCoins = rs.getInt("battle_coins");
                             data.excludeFromTop = rs.getInt("exclude_from_top") == 1;
                             allPlayers.add(data);
                         }
@@ -243,7 +218,6 @@ final class PlayerDataRepository {
     }
 
     public CompletableFuture<Void> resetSeason() {
-        boolean resetCoins = plugin.getConfigManager().isResetCoinsOnSeasonEnd();
         return CompletableFuture.runAsync(() -> {
             Connection conn = null;
             boolean shouldClose = connections.isMySQL();
@@ -252,7 +226,7 @@ final class PlayerDataRepository {
                 conn = connections.getConnection();
                 try (DatabaseTransaction transaction = new DatabaseTransaction(conn)) {
                     SeasonTransitionRepository.requireNoPendingTransition(conn, connections);
-                    resetOnConnection(conn, resetCoins);
+                    resetOnConnection(conn);
                     transaction.commit();
                 }
             } catch (SQLException e) {
@@ -265,10 +239,9 @@ final class PlayerDataRepository {
         }, connections.getExecutor());
     }
 
-    void resetOnConnection(Connection connection, boolean resetCoins) throws SQLException {
+    void resetOnConnection(Connection connection) throws SQLException {
         try (Statement statement = connection.createStatement()) {
-            statement.executeUpdate("UPDATE " + connections.getPrefix() + "players SET xp = 0, level = 1, claimed_free = '', claimed_premium = '', has_premium = 0, last_daily_reward = 0"
-                    + (resetCoins ? ", battle_coins = 0" : ""));
+            statement.executeUpdate("UPDATE " + connections.getPrefix() + "players SET xp = 0, level = 1, claimed_free = '', claimed_premium = '', has_premium = 0, last_daily_reward = 0");
             statement.executeUpdate("DELETE FROM " + connections.getPrefix() + "missions");
             statement.executeUpdate("DELETE FROM " + connections.getPrefix() + "daily_missions");
         }

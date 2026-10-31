@@ -69,7 +69,6 @@ public class SoundManager {
         ItemStack itemInHand = player.getInventory().getItemInMainHand();
         UUID uuid = player.getUniqueId();
         if (customItemManager.isPremiumPassItem(itemInHand)
-                || customItemManager.isBattleCoinsItem(itemInHand)
                 || customItemManager.isLevelBoostItem(itemInHand)) {
             ItemSound current = activeSoundTasks.get(uuid);
             if (current == null || current.player != player) startItemSound(player);
@@ -129,19 +128,6 @@ public class SoundManager {
 
                 if (tickCounter % 60 == 0) {
                     player.playSound(player.getLocation(), Sound.BLOCK_END_PORTAL_FRAME_FILL, 0.15f, 1.5f);
-                }
-
-            } else if (customItemManager.isBattleCoinsItem(itemInHand)) {
-                if (tickCounter % 20 == 0) {
-                    player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 0.2f, 1.8f);
-                }
-
-                if (tickCounter % 30 == 0) {
-                    player.playSound(player.getLocation(), Sound.BLOCK_NOTE_BLOCK_BELL, 0.15f, 1.5f);
-                }
-
-                if (tickCounter % 15 == 5) {
-                    player.playSound(player.getLocation(), Sound.ENTITY_GLOW_SQUID_AMBIENT, 0.1f, 2.0f);
                 }
 
             } else if (customItemManager.isLevelBoostItem(itemInHand)) {

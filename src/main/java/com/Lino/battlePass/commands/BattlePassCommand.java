@@ -86,12 +86,6 @@ public class BattlePassCommand implements CommandExecutor {
             case "removexp":
                 return players.handleXPCommand(sender, args, false);
 
-            case "addcoins":
-                return players.handleCoinsCommand(sender, args, true);
-
-            case "removecoins":
-                return players.handleCoinsCommand(sender, args, false);
-
             case "giveitem":
                 return rewards.handleGiveItemCommand(sender, args);
 
@@ -123,8 +117,6 @@ public class BattlePassCommand implements CommandExecutor {
             sender.sendMessage(plugin.getMessageManager().getMessage("messages.help.remove-premium"));
             sender.sendMessage(plugin.getMessageManager().getMessage("messages.help.add-xp"));
             sender.sendMessage(plugin.getMessageManager().getMessage("messages.help.remove-xp"));
-            sender.sendMessage(plugin.getMessageManager().getMessage("messages.help.add-coins"));
-            sender.sendMessage(plugin.getMessageManager().getMessage("messages.help.remove-coins"));
             sender.sendMessage(plugin.getMessageManager().getMessage("messages.help.giveitem"));
             sender.sendMessage(plugin.getMessageManager().getMessage("messages.help.exclude-top"));
             sender.sendMessage(plugin.getMessageManager().getMessage("messages.help.include-top"));

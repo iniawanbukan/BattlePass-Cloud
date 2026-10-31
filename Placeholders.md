@@ -17,10 +17,6 @@ Make sure you have PlaceholderAPI installed on your server. The BattlePass plugi
 - `%battlepass_premium%` - Shows "Yes" or "No"
 - `%battlepass_premium_status%` - Shows "Active" or "Inactive"
 
-### Currency
-- `%battlepass_coins%` - Current battle coins
-- `%battlepass_battlecoins%` - Same as above
-
 ### Rewards
 - `%battlepass_available_rewards%` - Number of unclaimed rewards available
 
@@ -31,7 +27,6 @@ Make sure you have PlaceholderAPI installed on your server. The BattlePass plugi
 - `%battlepass_missions_reset%` - Same as above
 - `%battlepass_daily_reward_time%` - Time until daily reward available
 - `%battlepass_daily_reward_available%` - Shows "Yes" or "No"
-- `%battlepass_coins_distribution_time%` - Time until next coins distribution
 
 ### Leaderboard
 - `%battlepass_rank%` - Player's rank on leaderboard
@@ -65,7 +60,6 @@ For top 10 players on leaderboard:
 - `%battlepass_top_X_name%` - Name of player at position X
 - `%battlepass_top_X_level%` - Level of player at position X
 - `%battlepass_top_X_xp%` - XP of player at position X
-- `%battlepass_top_X_coins%` - Coins of player at position X
 - `%battlepass_top_X_totallevels%` - Total levels of player at position X
 
 Replace X with the position (1-10)
@@ -78,7 +72,6 @@ Replace X with the position (1-10)
 &7Level: &e%battlepass_level%
 &7XP: &e%battlepass_xp_progress%
 &7Premium: &e%battlepass_premium_status%
-&7Coins: &e%battlepass_coins%
 ```
 
 ### Hologram Example
@@ -98,7 +91,6 @@ Replace X with the position (1-10)
 
 - Personal placeholders return `Loading...` while player data is being loaded. Global season/mission/event timers, season counts, total missions, mission names and top players also work without a viewing player.
 - Rank and top-player placeholders share a cached leaderboard refreshed on demand every five seconds. They never wait for SQL in the request. Before the first result they return `Loading...`; during a refresh or database error they retain the last successful result.
-- `%battlepass_coins_distribution_time%` returns `Unknown` until the coin delivery system has started.
 - `%battlepass_rank%` returns `Unranked` when the player is not in the leaderboard (or is excluded from it).
 - `%battlepass_top_X_name%` returns `Empty` when that leaderboard position has no player.
 - A ranked player whose profile has no known name is displayed as `Unknown`.

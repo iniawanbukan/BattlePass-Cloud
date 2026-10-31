@@ -23,10 +23,6 @@ public class ConfigManager {
     private String seasonResetType = "DURATION";
     private int seasonDuration = 30;
     private int dailyRewardXP = 200;
-    private List<Integer> coinsDistribution = new ArrayList<>();
-    private boolean shopEnabled = true;
-    private boolean resetCoinsOnSeasonEnd = true;
-    private int coinsDistributionHours = 24;
     private int missionResetHours = 24;
     private boolean customItemSoundsEnabled = true;
 
@@ -65,9 +61,6 @@ public class ConfigManager {
         seasonResetType = config.getString("season.reset-type", "DURATION");
         seasonDuration = Math.max(1, config.getInt("season.duration", 30));
         dailyRewardXP = Math.max(0, config.getInt("daily-reward.xp", 200));
-        shopEnabled = config.getBoolean("shop.enabled", true);
-        resetCoinsOnSeasonEnd = config.getBoolean("season.reset-coins-on-season-end", true);
-        coinsDistributionHours = Math.max(1, config.getInt("battle-coins.distribution-hours", 24));
         missionResetHours = Math.max(1, config.getInt("missions.reset-hours", 24));
         customItemSoundsEnabled = config.getBoolean("custom-items.sounds-enabled", true);
 
@@ -85,11 +78,6 @@ public class ConfigManager {
         missionDisabledWorlds = config.getStringList("missions.disabled-worlds");
         actionbarProgressDuration = Math.max(1, config.getInt("missions.actionbar.progress-duration", 10));
         actionbarCompletedDuration = Math.max(1, config.getInt("missions.actionbar.completed-duration", 15));
-
-        coinsDistribution.clear();
-        for (int i = 1; i <= 10; i++) {
-            coinsDistribution.add(Math.max(0, config.getInt("battle-coins.distribution." + i, 11 - i)));
-        }
 
         missionsConfig = nextMissions;
         int configuredMissionsCount = missionsConfig.getInt("daily-missions-count", 7);
@@ -169,22 +157,6 @@ public class ConfigManager {
 
     public int getDailyRewardXP() {
         return dailyRewardXP;
-    }
-
-    public List<Integer> getCoinsDistribution() {
-        return coinsDistribution;
-    }
-
-    public boolean isShopEnabled() {
-        return shopEnabled;
-    }
-
-    public boolean isResetCoinsOnSeasonEnd() {
-        return resetCoinsOnSeasonEnd;
-    }
-
-    public int getCoinsDistributionHours() {
-        return coinsDistributionHours;
     }
 
     public int getMissionResetHours() {

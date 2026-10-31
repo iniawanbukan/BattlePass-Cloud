@@ -21,7 +21,6 @@ First builds need network access to the repositories declared in `pom.xml`, incl
 | --- | --- |
 | Season countdown/reload/reset ordering | `MissionManagerSeasonTest`, `DatabaseSeasonDataTest` |
 | Schema migration/preserved data | `DatabaseSchemaTest` |
-| Coins and single task/deadline | `CoinsDistributionTaskTest`, `CoinsDistributionSchedulingTest` |
 | Inventory ownership | `GuiIsolationTest` |
 | XP cancellation | `BattlePassXPGainEventTest` |
 | Config keys/reload | `ReportedConfigurationTest` |
@@ -46,6 +45,12 @@ The subsequent menu/reward extraction moved 11 method bodies unchanged into `Bat
 ConfigManager now delegates its GUI material/model/visibility state to package-private GuiConfiguration (348 to 265 lines). CustomItemsListener delegates synchronous redemptions to package-private CustomItemRedemptions (326 to 114 lines); the listener retains event annotations, priority, recognition order, hand eligibility, cooldown and lifecycle, sharing its original effects instance. Public APIs, configuration paths/defaults, item quantities, XP hooks, feedback ordering and task delays are unchanged. A source comparison verified all 20 moved method bodies and the GUI reload block exactly; interaction dispatch differs only in helper qualifiers.
 
 The 41 existing tests pass before and after extraction. Temporary comparisons run original and extracted classes through 12 configuration scenarios, including strings/sections/NONE/invalid values, model-data cleanup, all public getters, reload failure preservation and recovery; 60 custom-item scenarios cover both hands, premium/coin/boost/event items, cancellation/modified XP, wallet limits, missing data, rejected starts, cooldown, quit/retry, coalesced inventory checks and shutdown effects. One additional comparison checks public listener methods and Bukkit annotations. All 114 tests passed together. Temporary comparison tests and original copies are removed, followed by clean package with the unchanged 41 existing tests. Bukkit, scheduling and sounds are mocked; no live Minecraft server was used.
+
+## Coins and shop removal (2026-10-31)
+
+Removed coin balance/distribution, coin-token redemption, coin commands/placeholders and the Battle Pass shop. Obsolete coin-only tests were removed; season persistence tests continue to cover the remaining database behavior. New database schemas omit the old coin columns, while existing databases retain those legacy columns without the plugin reading or writing them.
+
+Validation: `mvn clean package` passed with 38 tests and Java 21 bytecode (`--release 21`), using the cached Maven 3.9.11 distribution and available JDK 26. No live Minecraft server or MySQL instance was used.
 
 ## Commit and push
 

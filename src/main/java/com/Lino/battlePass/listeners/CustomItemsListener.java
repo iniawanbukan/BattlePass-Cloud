@@ -46,11 +46,10 @@ public class CustomItemsListener implements Listener {
         if (item == null) return;
 
         boolean premium = plugin.getCustomItemManager().isPremiumPassItem(item);
-        boolean coins = !premium && plugin.getCustomItemManager().isBattleCoinsItem(item);
-        boolean boost = !premium && !coins && plugin.getCustomItemManager().isLevelBoostItem(item);
-        boolean xpEvent = !premium && !coins && !boost && plugin.getCustomItemManager().isXPEventItem(item);
+        boolean boost = !premium && plugin.getCustomItemManager().isLevelBoostItem(item);
+        boolean xpEvent = !premium && !boost && plugin.getCustomItemManager().isXPEventItem(item);
 
-        if (!premium && !coins && !boost && !xpEvent) return;
+        if (!premium && !boost && !xpEvent) return;
 
         event.setCancelled(true);
 
@@ -67,8 +66,6 @@ public class CustomItemsListener implements Listener {
 
             if (premium) {
                 redemptions.handlePremiumPassUse(event, player, item);
-            } else if (coins) {
-                redemptions.handleBattleCoinsUse(event, player);
             } else if (boost) {
                 redemptions.handleLevelBoostUse(event, player, () -> activeUses.get(uuid) == use);
             } else {

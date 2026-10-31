@@ -12,28 +12,13 @@ import java.util.concurrent.CompletableFuture;
 final class SeasonAdminCommands {
     private final BattlePass plugin;
     private boolean seasonWarningPending;
-    private volatile long reloadRevision;
-
     SeasonAdminCommands(BattlePass plugin) { this.plugin = plugin; }
 
     void reloadPlugin(CommandSender sender) {
         if (!canStart(sender)) return;
-        long revision = ++reloadRevision;
-        MissionManager manager = plugin.getMissionManager();
         try { plugin.reload(); }
         catch (RuntimeException failure) { report(sender, "reload configuration", "messages.reload-failed", failure); return; }
         send(sender, "messages.config-reloaded");
-        try {
-            plugin.getDatabaseManager().loadCoinsDistributionTime().whenComplete((deadline, failure) ->
-                onMain(manager, () -> {
-                    if (reloadRevision != revision) return;
-                    if (failure != null) report(sender, "load the coin deadline", "messages.reload-coins-failed", failure);
-                    else {
-                        try { plugin.startCoinsDistributionTask(deadline); }
-                        catch (RuntimeException applyFailure) { report(sender, "restore the coin timer", "messages.reload-coins-apply-failed", applyFailure); }
-                    }
-                }));
-        } catch (RuntimeException failure) { report(sender, "load the coin deadline", "messages.reload-coins-failed", failure); }
     }
 
     boolean handleResetSeason(CommandSender sender) {

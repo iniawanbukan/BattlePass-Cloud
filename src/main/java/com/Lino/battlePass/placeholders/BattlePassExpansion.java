@@ -63,9 +63,6 @@ public class BattlePassExpansion extends PlaceholderExpansion {
                 return plugin.getMissionManager().getTimeUntilSeasonEnd();
             case "missions_time", "missions_reset":
                 return plugin.getMissionManager().getTimeUntilReset();
-            case "coins_distribution_time":
-                var distribution = plugin.getCoinsDistributionTask();
-                return distribution == null ? "Unknown" : distribution.getTimeUntilNextDistribution();
             case "total_missions":
                 return String.valueOf(plugin.getMissionManager().getDailyMissions().size());
             case "current_season":
@@ -83,7 +80,7 @@ public class BattlePassExpansion extends PlaceholderExpansion {
         if (identifier.startsWith("mission_") && !identifier.startsWith("mission_progress_") && !identifier.startsWith("mission_status_")) return "";
         boolean personal = switch (identifier) {
             case "level", "xp", "xp_needed", "xp_progress", "xp_percentage", "total_levels", "premium",
-                    "premium_status", "coins", "battlecoins", "available_rewards", "daily_reward_time",
+                    "premium_status", "available_rewards", "daily_reward_time",
                     "daily_reward_available", "completed_missions", "missions_progress" -> true;
             default -> identifier.startsWith("mission_progress_") || identifier.startsWith("mission_status_");
         };
@@ -100,7 +97,6 @@ public class BattlePassExpansion extends PlaceholderExpansion {
             case "total_levels" -> String.valueOf(data.totalLevels);
             case "premium" -> data.hasPremium ? "Yes" : "No";
             case "premium_status" -> data.hasPremium ? "Active" : "Inactive";
-            case "coins", "battlecoins" -> String.valueOf(data.battleCoins);
             case "available_rewards" -> player.isOnline() ? String.valueOf(plugin.getRewardManager().countAvailableRewards(data)) : "0";
             case "daily_reward_time" -> plugin.getMissionManager().getTimeUntilDailyReward(data.lastDailyReward);
             case "daily_reward_available" -> DailyRewardCooldown.isAvailable(data.lastDailyReward, System.currentTimeMillis()) ? "Yes" : "No";

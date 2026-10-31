@@ -4,8 +4,6 @@ messages:
   plugin-enabled: "<gradient:#00FF88:#00D4FF>✓ Battle Pass enabled successfully!</gradient>"
   config-reloaded: "<gradient:#00FF88:#00D4FF>✓ Configuration reloaded!</gradient>"
   reload-failed: "&cConfiguration reload failed. Check the server log."
-  reload-coins-failed: "&cCould not restore the coin delivery schedule after reload. The existing schedule was kept; check the server log."
-  reload-coins-apply-failed: "&cConfiguration reloaded, but the coin delivery timer could not be started. Check the server log."
   reset-busy: "&cA reset is already in progress. Please wait."
   reset-cooldown: "&cPlease wait a few seconds before resetting the season again."
   reset-failed: "&cThe reset could not be completed. Check the server log."
@@ -17,7 +15,7 @@ messages:
   leaderboard-unavailable: "&cThe leaderboard is temporarily unavailable. Please try again."
   invalid-amount: "<gradient:#FF0000:#FF6B6B>✗ Invalid amount! Please enter a number.</gradient>"
   amount-must-be-positive: "<gradient:#FF0000:#FF6B6B>✗ Amount must be positive!</gradient>"
-  invalid-item-type: "<gradient:#FF0000:#FF6B6B>✗ Invalid item type! Use 'premium', 'coins' or 'levelboost'.</gradient>"
+  invalid-item-type: "<gradient:#FF0000:#FF6B6B>✗ Invalid item type! Use 'premium', 'levelboost' or 'xpevent'.</gradient>"
 
   usage:
     battlepass: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass"
@@ -25,8 +23,6 @@ messages:
     remove-premium: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass removepremium <player>"
     add-xp: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass addxp <player> <amount>"
     remove-xp: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass removexp <player> <amount>"
-    add-coins: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass addcoins <player> <amount>"
-    remove-coins: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass removecoins <player> <amount>"
     giveitem: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass giveitem <type> <player> <amount>"
     reset-player: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass resetplayer <player>"
     edit-rewards-season: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass edit rewards season <number>"
@@ -50,8 +46,6 @@ messages:
     remove-premium: "<gradient:#4ECDC4:#45B7D1>/bp removepremium <player></gradient> &7- Remove premium pass"
     add-xp: "<gradient:#4ECDC4:#45B7D1>/bp addxp <player> <amount></gradient> &7- Add XP to a player"
     remove-xp: "<gradient:#4ECDC4:#45B7D1>/bp removexp <player> <amount></gradient> &7- Remove XP from a player"
-    add-coins: "<gradient:#4ECDC4:#45B7D1>/bp addcoins <player> <amount></gradient> &7- Add Battle Coins"
-    remove-coins: "<gradient:#4ECDC4:#45B7D1>/bp removecoins <player> <amount></gradient> &7- Remove Battle Coins"
     giveitem: "<gradient:#4ECDC4:#45B7D1>/bp giveitem <type> <player> <amount></gradient> &7- Give custom items"
     exclude-top: "<gradient:#4ECDC4:#45B7D1>/bp excludefromtop <player></gradient> &7- Hide player from leaderboard"
     include-top: "<gradient:#4ECDC4:#45B7D1>/bp includetop <player></gradient> &7- Show player in leaderboard"
@@ -133,30 +127,12 @@ messages:
     excluded: "<gradient:#00FF88:#45B7D1>✓</gradient> %player% is now excluded from the top leaderboard."
     included: "<gradient:#00FF88:#45B7D1>✓</gradient> %player% is now included in the top leaderboard."
 
-  coins:
-    distribution-announcement: "<gradient:#FFD93D:#FF6B6B>BATTLE COINS</gradient> <gradient:#4ECDC4:#45B7D1>Top 10 players are receiving their daily Battle Coins!</gradient>"
-    distribution-player: "<gradient:#FFD93D:#FF6B6B>#%rank%</gradient> <gradient:#4ECDC4:#45B7D1>%player%</gradient> &7received <gradient:#FFD93D:#FF6B6B>%amount% Battle Coins</gradient>"
-    received: "<gradient:#00FF88:#45B7D1>+ %amount% Battle Coins!</gradient>"
-    balance: "&7Your Battle Coins: <gradient:#FFD93D:#FF6B6B>%amount%</gradient>"
-    added-sender: "<gradient:#00FF88:#45B7D1>✓</gradient> Added <gradient:#FFD93D:#FF6B6B>%amount% Battle Coins</gradient> to %target%"
-    added-target: "<gradient:#00FF88:#45B7D1>+ %amount% Battle Coins!</gradient>"
-    removed-sender: "<gradient:#FF6B6B:#FF0000>✗</gradient> Removed %amount% Battle Coins from %target%"
-    removed-target: "<gradient:#FF6B6B:#FF0000>- %amount% Battle Coins!</gradient>"
-    insufficient-remove: "<gradient:#FF6B6B:#FF0000>✗</gradient> %target% only has %current% Battle Coins!"
-
-  shop:
-    insufficient-coins: "<gradient:#FF6B6B:#FF0000>✗ Insufficient Battle Coins!</gradient> &7Need: <gradient:#4ECDC4:#45B7D1>%required%</gradient> &7Have: <gradient:#4ECDC4:#45B7D1>%current%</gradient>"
-    purchase-success: "<gradient:#00FF88:#45B7D1>✓ Purchase Successful!</gradient> &fBought %item% &ffor <gradient:#FFD93D:#FF6B6B>%price% Battle Coins</gradient>"
-    shop-title: "<gradient:#FFD93D:#FF6B6B>Battle Pass Shop</gradient>"
-
   items:
     given: "<gradient:#00FF88:#45B7D1>✓</gradient> Given <gradient:#FFD93D:#FF6B6B>%amount%x %item%</gradient> to %target%"
     given-dropped: "<gradient:#00FF88:#45B7D1>✓</gradient> Given <gradient:#FFD93D:#FF6B6B>%amount%x %item%</gradient> to %target% <gradient:#FFE66D:#FF6B6B>(Some items dropped)</gradient>"
     received: "<gradient:#00FF88:#45B7D1>✓</gradient> You received <gradient:#FFD93D:#FF6B6B>%amount%x %item%</gradient>"
     already-have-premium: "<gradient:#FF6B6B:#FF0000>✗ You already have the Premium Battle Pass!</gradient>"
     premium-activated: "<gradient:#FFD93D:#FF6B6B>★ PREMIUM ACTIVATED ★</gradient>\n<gradient:#F7B731:#FC4A1A>You now have access to all premium rewards!</gradient>"
-    coins-redeemed: "<gradient:#00FF88:#45B7D1>✓ Redeemed %amount% Battle Coins!</gradient>"
-    coins-full: "&cYour Battle Coins balance is full. Your tokens have been kept."
     max-level-reached: "<gradient:#FF6B6B:#FF0000>✗ You have already reached the maximum level!</gradient>"
     xp-boost-used: "<gradient:#00FF88:#45B7D1>★ XP BOOST!</gradient>\n<gradient:#4ECDC4:#45B7D1>Consumed %items% elixir(s) and gained %amount% XP!</gradient>"
     xp-event-activated: "<gradient:#FFD700:#FF4500>XP EVENT!</gradient> <gradient:#4ECDC4:#45B7D1>%player%</gradient> &fhas activated a <gradient:#FFD93D:#FF6B6B>2x XP Event</gradient> for <gradient:#4ECDC4:#45B7D1>%duration%</gradient>!"
@@ -166,7 +142,6 @@ gui:
   battlepass: "<gradient:#FF6B6B:#4ECDC4>⚡ BATTLE PASS</gradient> &8- &7Page %page%"
   missions: "<gradient:#4ECDC4:#45B7D1>Daily Missions</gradient>"
   leaderboard: "<gradient:#FFD93D:#FF6B6B>Battle Pass Leaderboard</gradient>"
-  shop: "<gradient:#FFD93D:#FF6B6B>Battle Pass Shop</gradient>"
 
 items:
   progress:
@@ -219,20 +194,8 @@ items:
       - "&7View the top 10 players"
       - "&7with highest battle pass levels!"
       - "&7"
-      - "&8▸ &7Next Coins: <gradient:#FFD93D:#FF6B6B>%coins_time%</gradient>"
       - "&7"
       - "<gradient:#FFD93D:#FF6B6B>▶ CLICK TO VIEW</gradient>"
-
-  shop-button:
-    name: "<gradient:#FFD93D:#FF6B6B>Battle Pass Shop</gradient>"
-    lore:
-      - "&7"
-      - "&7Spend your Battle Coins on"
-      - "&7exclusive rewards and items!"
-      - "&7"
-      - "&8▸ &7Your Coins: <gradient:#FFD93D:#FF6B6B>%coins%</gradient>"
-      - "&7"
-      - "<gradient:#FFD93D:#FF6B6B>▶ CLICK TO OPEN</gradient>"
 
   daily-reward:
     name: "<gradient:#FFD93D:#FF6B6B>☀ Daily Reward</gradient>"
@@ -334,10 +297,9 @@ items:
     lore:
       - "&7"
       - "&8▸ &7Season ends: <gradient:#FFD93D:#FF6B6B>%season_time%</gradient>"
-      - "&8▸ &7Next coins: <gradient:#4ECDC4:#45B7D1>%coins_time%</gradient>"
       - "&7"
       - "&7Compete for the top spots"
-      - "&7and earn Battle Coins daily!"
+      - "&7and progress through the season!"
 
   leaderboard-player:
     name: "%rank% <gradient:#4ECDC4:#45B7D1>%player%</gradient>"
@@ -346,7 +308,6 @@ items:
       - "&8▸ &7Level: <gradient:#4ECDC4:#45B7D1>%level%</gradient>"
       - "&8▸ &7Total Levels: <gradient:#FFD93D:#FF6B6B>%total_levels%</gradient>"
       - "&8▸ &7XP: <gradient:#4ECDC4:#45B7D1>%xp%</gradient>"
-      - "&8▸ &7Battle Coins: <gradient:#FFD93D:#FF6B6B>%coins%</gradient>"
       - "&7"
       - "%status%"
 
@@ -360,57 +321,11 @@ items:
     you: "<gradient:#00FF88:#45B7D1>★ THIS IS YOU! ★</gradient>"
     other: "&7Keep grinding to beat them!"
 
-  coins-info:
-    name: "<gradient:#FFD93D:#FF6B6B>Battle Coins Info</gradient>"
-    lore:
-      - "&7"
-      - "&7Battle Coins are special currency"
-      - "&7awarded to top players daily!"
-      - "&7"
-      - "<gradient:#4ECDC4:#45B7D1>▼ How to earn ▼</gradient>"
-      - "&7• Be in the top 10 leaderboard"
-      - "&7• #1 gets 10 coins"
-      - "&7• #2 gets 9 coins"
-      - "&7• ... and so on"
-      - "&7"
-      - "<gradient:#FFD93D:#FF6B6B>▼ What they're for ▼</gradient>"
-      - "&7• Purchase exclusive items"
-      - "&7• Get special perks"
-      - "&7• Show off your dedication!"
-      - "&7"
-      - "&8▸ &7Next distribution: <gradient:#FFD93D:#FF6B6B>%time%</gradient>"
-
   back-button:
     name: "<gradient:#FF6B6B:#FF0000>← Back</gradient>"
     lore:
       - "&7Return to Battle Pass"
 
-  shop-balance:
-    name: "<gradient:#FFD93D:#FF6B6B>Your Balance</gradient>"
-    lore:
-      - "&7"
-      - "&8▸ &7Battle Coins: <gradient:#FFD93D:#FF6B6B>%coins%</gradient>"
-      - "&7"
-      - "&7Earn more by staying"
-      - "&7in the top 10!"
-
-time:
-  days-hours: "%days%d %hours%h"
-  hours-minutes: "%hours%h %minutes%m"
-  day: "day"
-  days: "days"
-  hour: "hour"
-  hours: "hours"
-  minute: "minute"
-  minutes: "minutes"
-  available-now: "<gradient:#00FF88:#45B7D1>Available now!</gradient>"
-
-reward-types:
-  free: "<gradient:#4ECDC4:#45B7D1>Free</gradient>"
-  premium: "<gradient:#FFD93D:#FF6B6B>Premium</gradient>"
-
-reward-level-locked:
-  name: "<gradient:#FF6B6B:#FF0000>Level %level% Reward</gradient>"
   lore-header:
     - "&7"
     - "&8▼ Rewards ▼"

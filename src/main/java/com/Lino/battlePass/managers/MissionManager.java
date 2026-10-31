@@ -196,7 +196,6 @@ public class MissionManager {
                 saveDailyMissions();
                 if (!shuttingDown && !persistenceFailed) {
                     resetHandler.completeSeasonReset(forced);
-                    if (forced) plugin.startCoinsDistributionTask(null);
                 }
                 pendingSeasonReset = null;
                 pendingSeasonCommit = null;

@@ -124,7 +124,6 @@ final class LeaderboardResults {
                         .replace("%level%", String.valueOf(topPlayer.level))
                         .replace("%total_levels%", String.valueOf(topPlayer.totalLevels))
                         .replace("%xp%", String.valueOf(topPlayer.xp))
-                        .replace("%coins%", String.valueOf(topPlayer.battleCoins))
                         .replace("%status%", status);
                 lore.add(GradientColorParser.parse(processedLine));
             }

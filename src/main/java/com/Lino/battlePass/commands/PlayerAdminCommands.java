@@ -9,7 +9,7 @@ import org.bukkit.Sound;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
-/** Handles player progress, premium access, coins and leaderboard commands. */
+/** Handles player progress, premium access and leaderboard commands. */
 final class PlayerAdminCommands {
 
     private final BattlePass plugin;
@@ -173,80 +173,6 @@ final class PlayerAdminCommands {
                                 "%amount%", String.valueOf(amount), "%target%", target.getName()));
                 target.sendMessage(plugin.getMessageManager().getPrefix() +
                         plugin.getMessageManager().getMessage("messages.xp.removed-target",
-                                "%amount%", String.valueOf(amount)));
-            }
-
-            return true;
-
-        } catch (NumberFormatException e) {
-            sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                    plugin.getMessageManager().getMessage("messages.invalid-amount"));
-            return true;
-        }
-    }
-
-    boolean handleCoinsCommand(CommandSender sender, String[] args, boolean add) {
-        if (!sender.hasPermission("battlepass.admin")) {
-            sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                    plugin.getMessageManager().getMessage("messages.no-permission"));
-            return true;
-        }
-
-        if (args.length < 3) {
-            String usage = add ? "messages.usage.add-coins" : "messages.usage.remove-coins";
-            sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                    plugin.getMessageManager().getMessage(usage));
-            return true;
-        }
-
-        Player target = Bukkit.getPlayer(args[1]);
-        if (target == null) {
-            sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                    plugin.getMessageManager().getMessage("messages.player-not-found"));
-            return true;
-        }
-
-        try {
-            int amount = Integer.parseInt(args[2]);
-            if (amount <= 0) {
-                sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                        plugin.getMessageManager().getMessage("messages.amount-must-be-positive"));
-                return true;
-            }
-
-            PlayerData data = plugin.getPlayerDataManager().getPlayerData(target.getUniqueId());
-            if (data == null) {
-                sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                        plugin.getMessageManager().getMessage("messages.data-loading"));
-                return true;
-            }
-
-            if (add) {
-                amount = data.addBattleCoins(amount);
-                plugin.getPlayerDataManager().markForSave(target.getUniqueId());
-                sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                        plugin.getMessageManager().getMessage("messages.coins.added-sender",
-                                "%amount%", String.valueOf(amount), "%target%", target.getName()));
-                target.sendMessage(plugin.getMessageManager().getPrefix() +
-                        plugin.getMessageManager().getMessage("messages.coins.added-target",
-                                "%amount%", String.valueOf(amount)));
-                target.playSound(target.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP, 1.0f, 1.0f);
-            } else {
-                if (data.battleCoins < amount) {
-                    sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                            plugin.getMessageManager().getMessage("messages.coins.insufficient-remove",
-                                    "%target%", target.getName(),
-                                    "%current%", String.valueOf(data.battleCoins)));
-                    return true;
-                }
-
-                data.battleCoins -= amount;
-                plugin.getPlayerDataManager().markForSave(target.getUniqueId());
-                sender.sendMessage(plugin.getMessageManager().getPrefix() +
-                        plugin.getMessageManager().getMessage("messages.coins.removed-sender",
-                                "%amount%", String.valueOf(amount), "%target%", target.getName()));
-                target.sendMessage(plugin.getMessageManager().getPrefix() +
-                        plugin.getMessageManager().getMessage("messages.coins.removed-target",
                                 "%amount%", String.valueOf(amount)));
             }
 

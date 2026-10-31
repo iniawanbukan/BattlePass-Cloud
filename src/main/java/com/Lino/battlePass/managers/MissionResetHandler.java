@@ -72,7 +72,7 @@ public class MissionResetHandler {
         recalculateSeasonEndDate();
         missionCycleStart = startedAt;
         nextMissionReset = startedAt.plusHours(missionIntervalHours());
-        return new SeasonResetPlan(id, rotationTarget, plugin.getConfigManager().isResetCoinsOnSeasonEnd(),
+        return new SeasonResetPlan(id, rotationTarget,
                 seasonStartDate, seasonEndDate, missionCycleStart, nextMissionReset,
                 missionCycleStart.toLocalDate().toString(), missions);
     }

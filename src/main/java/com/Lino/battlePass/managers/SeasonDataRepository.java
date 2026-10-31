@@ -8,7 +8,7 @@ import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
 import java.util.concurrent.TimeUnit;
 
-/** Persists season dates and coin deadlines while preserving season save ordering. */
+/** Persists season dates while preserving season save ordering. */
 final class SeasonDataRepository {
 
     private final BattlePass plugin;
@@ -58,66 +58,6 @@ final class SeasonDataRepository {
             ps.setString(5, cycleStart != null ? cycleStart.toString() : "");
             ps.executeUpdate();
         }
-    }
-
-    public CompletableFuture<Void> saveCoinsDistributionTime(LocalDateTime nextDistribution) {
-        return CompletableFuture.runAsync(() -> {
-            Connection conn = null;
-            boolean shouldClose = connections.isMySQL();
-
-            try {
-                conn = connections.getConnection();
-                saveCoinsOnConnection(conn, nextDistribution);
-            } catch (SQLException e) {
-                throw new CompletionException("Failed to save the coin deadline", e);
-            } finally {
-                if (shouldClose && conn != null) {
-                    try { conn.close(); } catch (SQLException e) {}
-                }
-            }
-        }, connections.getExecutor());
-    }
-
-    void saveCoinsOnConnection(Connection conn, LocalDateTime nextDistribution) throws SQLException {
-        String sql = connections.isMySQL()
-                ? "INSERT INTO " + connections.getPrefix() + "season_data (id, next_coins_distribution) VALUES (1, ?) ON DUPLICATE KEY UPDATE next_coins_distribution = VALUES(next_coins_distribution)"
-                : "INSERT INTO " + connections.getPrefix() + "season_data (id, next_coins_distribution) VALUES (1, ?) ON CONFLICT(id) DO UPDATE SET next_coins_distribution = excluded.next_coins_distribution";
-        try (PreparedStatement ps = conn.prepareStatement(sql)) {
-            ps.setString(1, nextDistribution.toString());
-            ps.executeUpdate();
-        }
-    }
-
-    public CompletableFuture<LocalDateTime> loadCoinsDistributionTime() {
-        return CompletableFuture.supplyAsync(() -> {
-            Connection conn = null;
-            boolean shouldClose = connections.isMySQL();
-
-            try {
-                conn = connections.getConnection();
-                try (PreparedStatement ps = conn.prepareStatement("SELECT next_coins_distribution FROM " + connections.getPrefix() + "season_data WHERE id = 1")) {
-                    try (ResultSet rs = ps.executeQuery()) {
-                        if (rs.next()) {
-                            String timeStr = rs.getString("next_coins_distribution");
-                            if (timeStr != null && !timeStr.isEmpty()) {
-                                try {
-                                    return LocalDateTime.parse(timeStr);
-                                } catch (Exception e) {
-                                    plugin.getLogger().warning("Invalid coins distribution time in DB: " + timeStr);
-                                }
-                            }
-                        }
-                    }
-                }
-            } catch (SQLException e) {
-                throw new CompletionException("Failed to load the coin deadline", e);
-            } finally {
-                if (shouldClose && conn != null) {
-                    try { conn.close(); } catch (SQLException e) {}
-                }
-            }
-            return null;
-        }, connections.getExecutor());
     }
 
     public CompletableFuture<Map<String, Object>> loadSeasonData() {
@@ -179,14 +119,6 @@ final class SeasonDataRepository {
                                 data.put("currentMissionDate", currentMissionDate);
                             }
 
-                            String coinsDistStr = rs.getString("next_coins_distribution");
-                            if (coinsDistStr != null && !coinsDistStr.isEmpty()) {
-                                try {
-                                    data.put("nextCoinsDistribution", LocalDateTime.parse(coinsDistStr));
-                                } catch (Exception e) {
-                                    plugin.getLogger().warning("Invalid coins distribution time in DB: " + coinsDistStr);
-                                }
-                            }
                         }
                     }
                 }

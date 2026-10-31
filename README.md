@@ -1,6 +1,6 @@
 # ⚔️ BattlePass - Minecraft Battle Pass Plugin for Paper & Spigot (1.21.11–26.3)
 
-BattlePass adds daily quests, seasonal progression, Free and Premium reward tracks, and Battle Coins to your Minecraft Java server. Create missions and rewards through in-game editors, with optional PlaceholderAPI and MythicMobs support.
+BattlePass adds daily quests, seasonal progression, and Free and Premium reward tracks to your Minecraft Java server. Create missions and rewards through in-game editors, with optional PlaceholderAPI and MythicMobs support.
 
 **[Download the latest JAR](https://github.com/lino9999/BattlePass/releases/latest)** · [What's new](docs/RELEASE_NOTES.md) · [Report a bug](https://github.com/lino9999/BattlePass/issues)
 
@@ -40,7 +40,7 @@ Every donation keeps the updates coming and helps me invest even more time into 
 
 * **💾 Database Storage**
     * **SQLite** (Default): Plug and play for single servers.
-    * **MySQL**: Store player progress, XP, coins and reward claims in a MySQL database. Live synchronization between servers is not provided.
+    * **MySQL**: Store player progress, XP and reward claims in a MySQL database. Live synchronization between servers is not provided.
 
 * **📜 Dynamic Missions**
     * **7 Daily Missions** generated randomly every day (count configurable).
@@ -49,13 +49,8 @@ Every donation keeps the updates coming and helps me invest even more time into 
     * **World Blacklist**: Disable mission progress in selected worlds (`missions.disabled-worlds`).
     * **Configurable actionbar**: Set how long mission progress messages stay visible.
 
-* **💰 Battle Coins & Shop**
-    * Players earn **Battle Coins** by ranking in the daily leaderboard.
-    * Spend coins in the customizable **Shop GUI** for exclusive items, XP boosts, or commands.
-    * Top 10 payouts, delivery interval, and rewards are fully configurable.
-
 * **Custom Items & XP Events**
-    * **Premium Voucher**, **Battle Coin Token**, **Experience Elixir** and **XP Event Beacon** items, obtainable via `/bp giveitem` or as rewards.
+    * **Premium Voucher**, **Experience Elixir** and **XP Event Beacon** items, obtainable via `/bp giveitem` or as rewards.
     * **Server-wide XP events** (`/bp event 2x 1h`) with a live bossbar countdown for all players.
 
 * **Daily Rewards**
@@ -84,7 +79,7 @@ Supports Spigot and available Paper releases from Minecraft Java 1.21.11 through
 2.  Drop it into your server's `/plugins/` folder.
 3.  (Optional) Install **PlaceholderAPI** for placeholders.
 4.  Restart your server.
-5.  Enjoy! Config files (`config.yml`, `missions.yml`, `shop.yml`) will generate automatically.
+5.  Enjoy! Config files (`config.yml`, `missions.yml`) will generate automatically.
 
 ### Updating an existing server
 
@@ -112,13 +107,11 @@ For contributors and AI agents, start with the [development quick reference](doc
 | :--- | :--- | :--- |
 | `/bp` or `/battlepass` | `battlepass.use` | Opens the main Battle Pass menu. |
 | `/bp help` | `battlepass.use` | Shows the help menu. |
-| `/bp giveitem <type> <player> <amount>` | `battlepass.admin` | Give special items (premium, coins, levelboost, xpevent). |
+| `/bp giveitem <type> <player> <amount>` | `battlepass.admin` | Give special items (premium, levelboost, xpevent). |
 | `/bp addpremium <player>` | `battlepass.admin` | Force unlock Premium Pass for a player. |
 | `/bp removepremium <player>` | `battlepass.admin` | Remove the Premium Pass from a player. |
 | `/bp addxp <player> <amount>` | `battlepass.admin` | Give XP to a player. |
 | `/bp removexp <player> <amount>` | `battlepass.admin` | Remove XP from a player. |
-| `/bp addcoins <player> <amount>` | `battlepass.admin` | Give Battle Coins to a player. |
-| `/bp removecoins <player> <amount>` | `battlepass.admin` | Remove Battle Coins from a player. |
 | `/bp reset season` | `battlepass.admin` | Force reset the entire season progress. |
 | `/bp reset missions` | `battlepass.admin` | Force generate new daily missions. |
 | `/bp resetplayer <name>` | `battlepass.admin` | Reset battle pass progress for a player. |
@@ -139,7 +132,6 @@ Add these to your scoreboard or tablist!
 * `%battlepass_xp_progress%` - Formatted XP (e.g., 50/200).
 * `%battlepass_premium_status%` - Returns "Active" or "Inactive".
 * `%battlepass_season_time%` - Time remaining in the current season.
-* `%battlepass_coins%` - Current Battle Coins balance.
 * `%battlepass_daily_reward_available%` - Check if daily reward is ready ("Yes"/"No").
 * `%battlepass_current_season%` - Current season number (season rotation).
 * `%battlepass_xp_event_multiplier%` - Active XP event multiplier (e.g., "2x").

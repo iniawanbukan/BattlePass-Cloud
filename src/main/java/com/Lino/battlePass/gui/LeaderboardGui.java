@@ -31,10 +31,6 @@ public class LeaderboardGui extends BaseGui {
         setupTitleItem(gui);
         setupLeaderboard(gui);
 
-        if (plugin.getConfigManager().isShopEnabled()) {
-            setupCoinsInfo(gui);
-        }
-
         gui.setItem(49, createBackButton());
 
         player.openInventory(gui);
@@ -46,13 +42,8 @@ public class LeaderboardGui extends BaseGui {
         meta.setDisplayName(plugin.getMessageManager().getMessage("items.leaderboard-title.name"));
 
         List<String> lore = new ArrayList<>();
-        String coinsTime = plugin.getCoinsDistributionTask() != null ?
-                plugin.getCoinsDistributionTask().getTimeUntilNextDistribution() : "Unknown";
-
         for (String line : plugin.getMessageManager().getMessagesConfig().getStringList("items.leaderboard-title.lore")) {
-            String processedLine = line
-                    .replace("%season_time%", plugin.getMissionManager().getTimeUntilSeasonEnd())
-                    .replace("%coins_time%", coinsTime);
+            String processedLine = line.replace("%season_time%", plugin.getMissionManager().getTimeUntilSeasonEnd());
             lore.add(GradientColorParser.parse(processedLine));
         }
 
@@ -65,22 +56,4 @@ public class LeaderboardGui extends BaseGui {
         new LeaderboardResults(plugin, player, gui).request();
     }
 
-    private void setupCoinsInfo(Inventory gui) {
-        ItemStack coinsInfo = new ItemStack(Material.GOLD_BLOCK);
-        ItemMeta meta = coinsInfo.getItemMeta();
-        meta.setDisplayName(plugin.getMessageManager().getMessage("items.coins-info.name"));
-
-        List<String> lore = new ArrayList<>();
-        String nextDistTime = plugin.getCoinsDistributionTask() != null ?
-                plugin.getCoinsDistributionTask().getTimeUntilNextDistribution() : "Unknown";
-
-        for (String line : plugin.getMessageManager().getMessagesConfig().getStringList("items.coins-info.lore")) {
-            String processedLine = line.replace("%time%", nextDistTime);
-            lore.add(GradientColorParser.parse(processedLine));
-        }
-
-        meta.setLore(lore);
-        coinsInfo.setItemMeta(meta);
-        gui.setItem(40, coinsInfo);
-    }
 }

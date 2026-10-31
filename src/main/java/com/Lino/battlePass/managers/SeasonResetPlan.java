@@ -5,7 +5,7 @@ import java.time.LocalDateTime;
 import java.util.*;
 
 /** Immutable input captured before a season-reset job can outlive a configuration reload. */
-record SeasonResetPlan(String id, int rotationTarget, boolean resetCoins, LocalDateTime start,
+record SeasonResetPlan(String id, int rotationTarget, LocalDateTime start,
                        LocalDateTime end, LocalDateTime cycleStart, LocalDateTime nextReset,
                        String missionDate, List<Mission> missions) {
     SeasonResetPlan {

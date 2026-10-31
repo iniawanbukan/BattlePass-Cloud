@@ -11,7 +11,7 @@ import java.util.function.LongSupplier;
 /** No SQL waits: bounded leaderboard snapshots shared by all leaderboard placeholder readers. */
 final class LeaderboardPlaceholders {
     private static final long REFRESH_NANOS = TimeUnit.SECONDS.toNanos(5);
-    private static final Set<String> TOP_FIELDS = Set.of("name", "level", "xp", "coins", "totallevels");
+    private static final Set<String> TOP_FIELDS = Set.of("name", "level", "xp", "totallevels");
     private final BattlePass plugin;
     private final LongSupplier clock;
     private volatile List<Entry> cached;
@@ -45,7 +45,6 @@ final class LeaderboardPlaceholders {
         return switch (parts.length == 1 ? "name" : parts[1]) {
             case "level" -> String.valueOf(entry.row.level);
             case "xp" -> String.valueOf(entry.row.xp);
-            case "coins" -> String.valueOf(entry.row.coins);
             case "totallevels" -> String.valueOf(entry.row.totalLevels);
             default -> entry.name;
         };
@@ -85,7 +84,7 @@ final class LeaderboardPlaceholders {
         if (!owns(request)) return;
         if (failure != null) { fail(request, failure); return; }
         try {
-            List<Row> rows = players.stream().limit(10).map(data -> new Row(data.uuid, data.level, data.xp, data.battleCoins, data.totalLevels)).toList();
+            List<Row> rows = players.stream().limit(10).map(data -> new Row(data.uuid, data.level, data.xp, data.totalLevels)).toList();
             if (rows.isEmpty() || plugin.getServer().isPrimaryThread()) publish(request, rows);
             else {
                 BukkitTask task = plugin.getServer().getScheduler().runTask(plugin, () -> publish(request, rows));
@@ -124,6 +123,6 @@ final class LeaderboardPlaceholders {
     }
 
     private static final class Request { volatile BukkitTask task; }
-    private record Row(UUID uuid, int level, int xp, int coins, int totalLevels) {}
+    private record Row(UUID uuid, int level, int xp, int totalLevels) {}
     private record Entry(Row row, String name) {}
 }

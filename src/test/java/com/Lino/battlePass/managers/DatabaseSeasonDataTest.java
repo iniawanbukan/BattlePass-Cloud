@@ -40,22 +40,20 @@ class DatabaseSeasonDataTest {
     }
 
     @Test
-    void migratesOldSchemaAndPersistsStartWithoutChangingCoinsScheduleOrPlayerProgress() throws Exception {
+    void migratesOldSchemaAndPersistsStartWithoutChangingPlayerProgress() throws Exception {
         Path databaseFile = Files.createDirectories(dataFolder.resolve("Database")).resolve("battlepass.db");
-        LocalDateTime coinsTime = LocalDateTime.of(2026, 10, 1, 12, 0);
         LocalDateTime oldEnd = LocalDateTime.of(2026, 10, 20, 12, 0);
         try (var connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
              var statement = connection.createStatement()) {
             statement.executeUpdate("CREATE TABLE season_data (id INTEGER PRIMARY KEY, end_date TEXT, " +
-                    "mission_reset_time TEXT, current_mission_date TEXT, next_coins_distribution TEXT)");
-            statement.executeUpdate("INSERT INTO season_data VALUES (1, '" + oldEnd + "', '', '2026-09-29', '" + coinsTime + "')");
+                    "mission_reset_time TEXT, current_mission_date TEXT)");
+            statement.executeUpdate("INSERT INTO season_data VALUES (1, '" + oldEnd + "', '', '2026-09-29')");
         }
 
         startDatabase();
         Map<String, Object> legacy = database.loadSeasonData().get(5, TimeUnit.SECONDS);
         assertFalse(legacy.containsKey("startDate"));
         assertEquals(oldEnd, legacy.get("endDate"));
-        assertEquals(coinsTime, legacy.get("nextCoinsDistribution"));
         try (var connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
              var statement = connection.createStatement()) {
             statement.executeUpdate("INSERT INTO players (uuid, xp, level, has_premium) " +
@@ -72,7 +70,6 @@ class DatabaseSeasonDataTest {
         assertEquals(start.plusDays(150), restored.get("endDate"));
         assertEquals(start.plusDays(1), restored.get("missionResetTime"));
         assertEquals("2026-09-29", restored.get("currentMissionDate"));
-        assertEquals(coinsTime, restored.get("nextCoinsDistribution"));
         try (var connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
              var statement = connection.createStatement();
              var player = statement.executeQuery("SELECT xp, level, has_premium FROM players")) {
@@ -92,7 +89,7 @@ class DatabaseSeasonDataTest {
     }
 
     @Test
-    void upgradesLegacyMissionAndCoinColumnsWithoutDiscardingExistingMissions() throws Exception {
+    void upgradesLegacyMissionColumnsWithoutDiscardingExistingMissions() throws Exception {
         Path databaseFile = Files.createDirectories(dataFolder.resolve("Database")).resolve("battlepass.db");
         String missionDate = LocalDateTime.now().toLocalDate().toString();
         try (var connection = DriverManager.getConnection("jdbc:sqlite:" + databaseFile);
@@ -111,10 +108,6 @@ class DatabaseSeasonDataTest {
         assertEquals(1, missions.size());
         assertEquals("Old mission", missions.getFirst().name);
         assertTrue(missions.getFirst().additionalTargets.isEmpty());
-        LocalDateTime coinsTime = LocalDateTime.now().plusHours(12);
-        database.saveCoinsDistributionTime(coinsTime).get(5, TimeUnit.SECONDS);
-        assertEquals(coinsTime, database.loadCoinsDistributionTime().get(5, TimeUnit.SECONDS));
-
         missions.getFirst().additionalTargets.add("DEEPSLATE");
         database.saveDailyMissions(missions, missionDate).get(5, TimeUnit.SECONDS);
         assertEquals(missions.getFirst().additionalTargets,
@@ -122,20 +115,18 @@ class DatabaseSeasonDataTest {
     }
 
     @Test
-    void shutdownFlushesQueuedDeadlineChangesAndCoinsWritesPreserveDates() throws Exception {
+    void shutdownFlushesQueuedSeasonChangesAndPreservesDates() throws Exception {
         startDatabase();
         LocalDateTime start = LocalDateTime.of(2026, 9, 29, 12, 0);
         for (int days = 30; days <= 150; days++) {
             database.saveSeasonData(start, start.plusDays(days), start.plusDays(1), "2026-09-29");
         }
-        database.saveCoinsDistributionTime(start.plusHours(12)).get(5, TimeUnit.SECONDS);
         database.shutdown();
         startDatabase();
 
         Map<String, Object> restored = database.loadSeasonData().get(5, TimeUnit.SECONDS);
         assertEquals(start, restored.get("startDate"));
         assertEquals(start.plusDays(150), restored.get("endDate"));
-        assertEquals(start.plusHours(12), restored.get("nextCoinsDistribution"));
     }
 
     private void startDatabase() throws Exception {

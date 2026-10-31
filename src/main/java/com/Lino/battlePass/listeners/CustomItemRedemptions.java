@@ -82,50 +82,6 @@ final class CustomItemRedemptions {
         }
     }
 
-    void handleBattleCoinsUse(PlayerInteractEvent event, Player player) {
-        event.setCancelled(true);
-
-        ItemStack itemInHand = event.getItem();
-
-        if (itemInHand == null || !plugin.getCustomItemManager().isBattleCoinsItem(itemInHand)) {
-            return;
-        }
-
-        PlayerData data = plugin.getPlayerDataManager().getPlayerData(player.getUniqueId());
-        if (data == null) {
-            player.sendMessage(plugin.getMessageManager().getPrefix() +
-                    plugin.getMessageManager().getMessage("messages.data-loading"));
-            return;
-        }
-
-        int amount = data.addBattleCoins(itemInHand.getAmount());
-        if (amount == 0) {
-            player.sendMessage(plugin.getMessageManager().getPrefix() +
-                    plugin.getMessageManager().getMessage("messages.items.coins-full"));
-            return;
-        }
-        plugin.getPlayerDataManager().markForSave(player.getUniqueId());
-
-        if (amount == itemInHand.getAmount()) {
-            consumeEntireHeldItem(event, player);
-        } else {
-            itemInHand.setAmount(itemInHand.getAmount() - amount);
-        }
-
-        player.sendMessage(plugin.getMessageManager().getPrefix() +
-                plugin.getMessageManager().getMessage("messages.items.coins-redeemed",
-                        "%amount%", String.valueOf(amount)));
-        player.playSound(player.getLocation(), Sound.ENTITY_PLAYER_LEVELUP, 1.0f, 1.5f);
-
-        for (int i = 0; i < Math.min(amount, 10); i++) {
-            final int index = i;
-            effects.playLater(player, i * 3L, () -> {
-                player.playSound(player.getLocation(), Sound.ENTITY_EXPERIENCE_ORB_PICKUP,
-                        0.8f, 1.2f + (index * 0.1f));
-            });
-        }
-    }
-
     void handleLevelBoostUse(PlayerInteractEvent event, Player player, BooleanSupplier currentUse) {
         event.setCancelled(true);
 

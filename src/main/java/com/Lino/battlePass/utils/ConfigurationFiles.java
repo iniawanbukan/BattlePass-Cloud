@@ -8,7 +8,7 @@ import java.util.List;
 
 /** Strict reads for managed YAML; missing optional files retain AtomicYamlFile's empty/default contract. */
 public final class ConfigurationFiles {
-    private static final List<String> MANAGED = List.of("config.yml", "missions.yml", "messages.yml", "BattlePassFREE.yml", "BattlePassPREMIUM.yml", "shop.yml");
+    private static final List<String> MANAGED = List.of("config.yml", "missions.yml", "messages.yml", "BattlePassFREE.yml", "BattlePassPREMIUM.yml");
     private ConfigurationFiles() {}
 
     public static YamlConfiguration read(File file) {

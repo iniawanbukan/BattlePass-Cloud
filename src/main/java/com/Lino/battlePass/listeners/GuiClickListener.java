@@ -59,7 +59,6 @@ public class GuiClickListener implements Listener {
                 }
             }
             case MISSIONS -> handleMissionsClick(player, clicked, event.getSlot());
-            case SHOP -> handleShopClick(player, clicked, event.getSlot());
             default -> { }
         }
     }
@@ -78,7 +77,7 @@ public class GuiClickListener implements Listener {
 
     private boolean isMainMenu(BaseHolder.MenuContext context) {
         return context != null && switch (context.type()) {
-            case BATTLE_PASS, LEADERBOARD, MISSIONS, SHOP -> true;
+            case BATTLE_PASS, LEADERBOARD, MISSIONS -> true;
             default -> false;
         };
     }
@@ -142,10 +141,6 @@ public class GuiClickListener implements Listener {
                 if (slot == 48) plugin.getGuiManager().openLeaderboardGUI(player);
                 break;
 
-            case GOLD_INGOT:
-                if (slot == 47 && plugin.getConfigManager().isShopEnabled()) plugin.getGuiManager().openShopGUI(player);
-                break;
-
             case SUNFLOWER:
                 if (slot == 50) handleDailyRewardClaim(player, currentPage);
                 break;
@@ -159,18 +154,6 @@ public class GuiClickListener implements Listener {
             default:
                 break;
         }
-    }
-
-    private void handleShopClick(Player player, ItemStack clicked, int slot) {
-        if (clicked.getType() == Material.BARRIER && slot == 49) {
-            int page = plugin.getGuiManager().getCurrentPages().getOrDefault(player.getEntityId(), 1);
-            plugin.getGuiManager().openBattlePassGUI(player, page);
-            return;
-        }
-
-        if (slot == 4) return;
-
-        plugin.getShopManager().purchaseItem(player, slot);
     }
 
     private void handleRewardClaim(Player player, int slot, int currentPage) {
