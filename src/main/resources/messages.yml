@@ -23,6 +23,8 @@ messages:
     remove-premium: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass removepremium <player>"
     add-xp: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass addxp <player> <amount>"
     remove-xp: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass removexp <player> <amount>"
+    add-level: "&eUsage: /battlepass addlevel <player> <amount>"
+    remove-level: "&eUsage: /battlepass removelevel <player> <amount>"
     giveitem: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass giveitem <type> <player> <amount>"
     reset-player: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass resetplayer <player>"
     edit-rewards-season: "<gradient:#FFE66D:#FF6B6B>Usage:</gradient> &f/battlepass edit rewards season <number>"
@@ -45,6 +47,8 @@ messages:
     add-premium: "<gradient:#4ECDC4:#45B7D1>/bp addpremium <player></gradient> &7- Give premium pass"
     remove-premium: "<gradient:#4ECDC4:#45B7D1>/bp removepremium <player></gradient> &7- Remove premium pass"
     add-xp: "<gradient:#4ECDC4:#45B7D1>/bp addxp <player> <amount></gradient> &7- Add XP to a player"
+    add-level: "<gradient:#4ECDC4:#45B7D1>/bp addlevel <player> <amount></gradient> &7- Add levels to a player"
+    remove-level: "<gradient:#4ECDC4:#45B7D1>/bp removelevel <player> <amount></gradient> &7- Remove levels from a player"
     remove-xp: "<gradient:#4ECDC4:#45B7D1>/bp removexp <player> <amount></gradient> &7- Remove XP from a player"
     giveitem: "<gradient:#4ECDC4:#45B7D1>/bp giveitem <type> <player> <amount></gradient> &7- Give custom items"
     exclude-top: "<gradient:#4ECDC4:#45B7D1>/bp excludefromtop <player></gradient> &7- Hide player from leaderboard"
@@ -65,6 +69,14 @@ messages:
     added-target: "<gradient:#00FF88:#45B7D1>+ %amount% XP</gradient>"
     removed-sender: "<gradient:#FF6B6B:#FF0000>✗</gradient> Removed %amount% XP from %target%"
     removed-target: "<gradient:#FF6B6B:#FF0000>- %amount% XP</gradient>"
+
+  level:
+    added-sender: "&aAdded &e%amount% &alevel(s) to &e%target% &a(now level &e%level%&a)."
+    added-target: "&aYou received &e%amount% &alevel(s)! You are now level &e%level%&a."
+    removed-sender: "&aRemoved &e%amount% &alevel(s) from &e%target% &a(now level &e%level%&a)."
+    removed-target: "&cYou lost &e%amount% &clevel(s). You are now level &e%level%&c."
+    max-reached: "&e%target% &cis already at max level &e(%level%)&c."
+    min-reached: "&e%target% &cis already at minimum level &e(%level%)&c."
 
   level-up: "<gradient:#FFD93D:#FF6B6B>⬆ LEVEL UP!</gradient> <gradient:#4ECDC4:#45B7D1>You are now level %level%</gradient>"
   new-rewards: "<gradient:#00FF88:#45B7D1>NEW REWARDS!</gradient> &fYou have new rewards available to claim!"
@@ -193,7 +205,6 @@ items:
       - "&7"
       - "&7View the top 10 players"
       - "&7with highest battle pass levels!"
-      - "&7"
       - "&7"
       - "<gradient:#FFD93D:#FF6B6B>▶ CLICK TO VIEW</gradient>"
 
@@ -326,6 +337,23 @@ items:
     lore:
       - "&7Return to Battle Pass"
 
+time:
+  days-hours: "%days%d %hours%h"
+  hours-minutes: "%hours%h %minutes%m"
+  day: "day"
+  days: "days"
+  hour: "hour"
+  hours: "hours"
+  minute: "minute"
+  minutes: "minutes"
+  available-now: "<gradient:#00FF88:#45B7D1>Available now!</gradient>"
+
+reward-types:
+  free: "<gradient:#4ECDC4:#45B7D1>Free</gradient>"
+  premium: "<gradient:#FFD93D:#FF6B6B>Premium</gradient>"
+
+reward-level-locked:
+  name: "<gradient:#FF6B6B:#FF0000>Level %level% Reward</gradient>"
   lore-header:
     - "&7"
     - "&8▼ Rewards ▼"

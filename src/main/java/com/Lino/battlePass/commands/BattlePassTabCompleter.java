@@ -1,16 +1,15 @@
 package com.Lino.battlePass.commands;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Locale;
+import java.util.stream.Collectors;
 
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
-
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
 
 public class BattlePassTabCompleter implements TabCompleter {
 
@@ -30,6 +29,8 @@ public class BattlePassTabCompleter implements TabCompleter {
                 completions.add("removepremium");
                 completions.add("addxp");
                 completions.add("removexp");
+                completions.add("addlevel");
+                completions.add("removelevel");
                 completions.add("giveitem");
                 completions.add("excludefromtop");
                 completions.add("includetop");
@@ -58,6 +59,7 @@ public class BattlePassTabCompleter implements TabCompleter {
 
                 if (subCommand.equals("addpremium") || subCommand.equals("removepremium") ||
                         subCommand.equals("addxp") || subCommand.equals("removexp") ||
+                        subCommand.equals("addlevel") || subCommand.equals("removelevel") ||
                         subCommand.equals("excludefromtop") || subCommand.equals("includetop") ||
                         subCommand.equals("resetplayer")) {
 
@@ -80,7 +82,8 @@ public class BattlePassTabCompleter implements TabCompleter {
                 completions.addAll(Bukkit.getOnlinePlayers().stream()
                         .map(Player::getName)
                         .collect(Collectors.toList()));
-            } else if (subCommand.equals("addxp") || subCommand.equals("removexp")) {
+            } else if (subCommand.equals("addxp") || subCommand.equals("removexp") ||
+                    subCommand.equals("addlevel") || subCommand.equals("removelevel")) {
 
                 completions.add("10");
                 completions.add("50");

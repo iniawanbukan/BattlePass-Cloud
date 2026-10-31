@@ -2,11 +2,12 @@ package com.Lino.battlePass.commands;
 
 import java.util.Locale;
 
-import com.Lino.battlePass.BattlePass;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+
+import com.Lino.battlePass.BattlePass;
 
 public class BattlePassCommand implements CommandExecutor {
 
@@ -85,6 +86,12 @@ public class BattlePassCommand implements CommandExecutor {
 
             case "removexp":
                 return players.handleXPCommand(sender, args, false);
+
+            case "addlevel":
+                return players.handleAddLevel(sender, args, true);
+
+            case "removelevel":
+                return players.handleAddLevel(sender, args, false);
 
             case "giveitem":
                 return rewards.handleGiveItemCommand(sender, args);
