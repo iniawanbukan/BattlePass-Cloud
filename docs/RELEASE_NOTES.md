@@ -1,6 +1,6 @@
 # BattlePass release notes
 
-## 8.6.1 — Missions & Stability Update
+## 8.6.2 Unofficial — Missions & Stability Update
 
 This update brings together the latest compatibility work and the fixes made since the previous 8.6 download.
 

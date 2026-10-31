@@ -75,7 +75,7 @@ Every donation keeps the updates coming and helps me invest even more time into 
 
 Supports Spigot and available Paper releases from Minecraft Java 1.21.11 through 26.3. Use Java 21 on 1.21.11 and Java 25 on 26.x. See the [compatibility matrix](docs/COMPATIBILITY.md) for exact builds and verification limits. Paper has no published 26.1 build; its 26.1.1 build is alpha.
 
-1.  Download `BattlePass-8.6.1.jar` from the latest [GitHub release](https://github.com/lino9999/BattlePass/releases/latest). Choose the JAR under **Assets**, rather than the source-code ZIP.
+1.  Download `BattlePass-8.6.2 Unofficial.jar` from the latest [GitHub release](https://github.com/lino9999/BattlePass/releases/latest). Choose the JAR under **Assets**, rather than the source-code ZIP.
 2.  Drop it into your server's `/plugins/` folder.
 3.  (Optional) Install **PlaceholderAPI** for placeholders.
 4.  Restart your server.
@@ -93,7 +93,7 @@ When reporting a problem, include the Minecraft version, Paper/Spigot build, Bat
 
 ### Build from source
 
-Use Java 21 and Maven, then run `mvn clean package`. The build runs the regression tests and produces `target/BattlePass-8.6.1.jar`. The release version is defined in `pom.xml`; Maven also writes it into the packaged `plugin.yml`.
+Use Java 21 and Maven, then run `mvn clean package`. The build runs the regression tests and produces `target/BattlePass-8.6.2 Unofficial.jar`. The release version is defined in `pom.xml`; Maven also writes it into the packaged `plugin.yml`.
 
 See [the issue review](docs/ISSUE_REVIEW.md) for the fixes, configuration examples and validation details. Existing databases are migrated automatically at startup. If MySQL reports an `ALTER` permission error, grant the plugin's database account permission to update its tables before restarting.
 
